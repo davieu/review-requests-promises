@@ -46,6 +46,27 @@ createPost({ title: 'Post', body: 'This is post three'})
   .then(getPosts)
   .catch(err => console.error(err))
 
+
+/**********************************
+ * ASYNC AWAIT
+ */
+myAsyncFunc = async () => {
+  try {
+    await createPost({ title: 'Post', body: 'This is post four'})
+    getPosts();
+  } catch(err) {
+    console.error(err)
+  }
+}
+
+myAsyncFunc();
+
+
+
+
+/*******************************
+ * PROMISE.all and messing with http get requests
+ */
 const promise1 = Promise.resolve('prom1')
 const promise2 = Promise.resolve('22222')
 const promise3 = new Promise((resolve, reject) => {
@@ -66,11 +87,46 @@ Promise.all([promise1, promise2, promise3, promise4])
 // fetch needs 2 .then The first one is to format it with json() 2nd .then to get data
 const fetchUsers = fetch('https://jsonplaceholder.typicode.com/users')
   .then(res => res.json())
-  .then(res => console.log(res))
+  .then(res => console.log('thenFetch', res))
 
 // axios cdn through script in html
 const axiosGET = axios.get('https://jsonplaceholder.typicode.com/users')
-  .then(res => res.data)
-  .then(res => res);
+  .then(res => console.log('thenAxios', res.data))
 
-axiosGET.then(res => console.log(res))
+
+
+/********************************
+ * Async Await with requests
+ */
+
+fetchReq = async () => {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    const data = await response.json()
+    console.log('FETCHasync', data)
+  } catch(err) {
+    console.error(err)
+  }
+}
+
+fetchReq()
+
+axiosReq = async () => {
+  try {
+    const response = await axios.get('https://jsonplaceholder.typicode.com/users')
+    console.log('AXIOSasync', response.data)
+    return response.data
+  } catch(err) {
+    console.error(err)
+  }
+}
+
+let users = axiosReq();
+
+changeUserArray = async () => {
+  let users = await axiosReq();
+  users.forEach(user => user.name = 'AYYY')
+  console.log('changeUSERSnames', users)
+}
+
+changeUserArray();
