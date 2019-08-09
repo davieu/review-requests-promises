@@ -1,0 +1,1 @@
+alert('JS es6 modules are not supported on your browser.');
